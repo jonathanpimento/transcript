@@ -120,6 +120,147 @@
         .copy-btn:hover {
             background: #2563eb;
         }
+        <style>
+/* Timeline styles */
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #2563eb;
+    border: 2px solid #fff;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    bottom: -20px;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timeline-item:last-child:before {
+    display: none;
+}
+
+.timeline-content {
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 6px;
+}
+
+.timeline-meta {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.timeline-meta span {
+    margin-right: 16px;
+}
+
+/* Speaker section enhancements */
+.speaker-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+.speaker-role {
+    font-size: 0.875rem;
+    color: #4b5563;
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.speaking-time {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Metrics grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.metric-item {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 4px;
+}
+
+.metric-value {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #1e40af;
+}
+
+/* Tags */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.tag {
+    background: #e5e7eb;
+    color: #4b5563;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+/* Warning section */
+.warning-section {
+    background: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.warning-list li {
+    color: #856404;
+}
+
+/* Resource categories */
+.resource-category {
+    margin-bottom: 1rem;
+}
+
+.resource-category h4 {
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+/* Audience list */
+        .audience {
+            color: #4b5563;
+    margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -190,116 +331,314 @@
             });
         }
 
-        function formatResults(analysis) {
-            try {
-                const data = JSON.parse(analysis);
-                let html = '';
-                
-                // Podcast Summary
-                if (data.podcastSummary) {
-                    html += `
-                        <div class="result-section">
-                            <h3>Podcast Summary</h3>
-                            <p>${data.podcastSummary}</p>
-                        </div>
-                    `;
-                }
-                
-                // Social Share Text
-                if (data.socialShareText) {
-                    html += `
-                        <div class="result-section">
-                            <h3>Social Media Content</h3>
-                            ${data.socialShareText.twitter ? `
-                                <h4>Twitter</h4>
-                                <div class="social-share">${data.socialShareText.twitter}</div>
-                            ` : ''}
-                            ${data.socialShareText.linkedin ? `
-                                <h4>LinkedIn</h4>
-                                <div class="social-share">${data.socialShareText.linkedin}</div>
-                            ` : ''}
-                        </div>
-                    `;
-                }
-                
-                // Speaker Insights
-                if (data.speakerInsights && data.speakerInsights.length) {
-                    html += `
-                        <div class="result-section">
-                            <h3>Speaker Insights</h3>
-                            ${data.speakerInsights.map(speaker => `
-                                <div class="speaker-section">
-                                    <h4>${speaker.name}</h4>
-                                    ${speaker.keyPoints && speaker.keyPoints.length ? `
-                                        <h5>Key Points</h5>
-                                        <ul>
-                                            ${speaker.keyPoints.map(point => `<li>${point}</li>`).join('')}
-                                        </ul>
-                                    ` : ''}
-                                    ${speaker.bestQuote ? `
-                                        <h5>Notable Quote</h5>
-                                        <blockquote>${speaker.bestQuote}</blockquote>
-                                    ` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                }
-                
-                // Categories
-                if (data.podcastCategories) {
-                    html += `
-                        <div class="result-section">
-                            <h3>Podcast Categories</h3>
-                            <p><strong>Primary Category:</strong> ${data.podcastCategories.primaryCategory}</p>
-                            ${data.podcastCategories.subCategories && data.podcastCategories.subCategories.length ? `
-                                <p><strong>Sub-Categories:</strong> ${data.podcastCategories.subCategories.join(', ')}</p>
-                            ` : ''}
-                        </div>
-                    `;
-                }
-                
-                return html;
-            } catch (e) {
-                return `<div class="result-section">${analysis}</div>`;
-            }
+function formatResults(analysis) {
+    try {
+        const data = JSON.parse(analysis);
+        let html = '';
+        
+        // Podcast Summary
+        if (data.podcastSummary) {
+            html += `
+                <div class="result-section">
+                    <h3>Podcast Summary</h3>
+                    <p>${data.podcastSummary}</p>
+                </div>
+            `;
+        }
+        
+        // Social Share Text
+        if (data.socialShareText) {
+            html += `
+                <div class="result-section">
+                    <h3>Social Media Content</h3>
+                    ${Object.entries(data.socialShareText).map(([platform, text]) => `
+                        <h4>${platform.charAt(0).toUpperCase() + platform.slice(1)}</h4>
+                        <div class="social-share">${text}</div>
+                    `).join('')}
+                </div>
+            `;
         }
 
+        // Key Topics Timeline
+        if (data.keyTopics && data.keyTopics.length) {
+            html += `
+                <div class="result-section">
+                    <h3>Discussion Timeline</h3>
+                    <div class="timeline">
+                        ${data.keyTopics.map(topic => `
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h4>${topic.topic}</h4>
+                                    <div class="timeline-meta">
+                                        <span class="timestamp">${topic.timestamp}</span>
+                                        <span class="duration">${topic.duration}</span>
+                                    </div>
+                                    <p>${topic.summary}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Speaker Insights
+        if (data.speakerInsights && data.speakerInsights.length) {
+            html += `
+                <div class="result-section">
+                    <h3>Speaker Insights</h3>
+                    ${data.speakerInsights.map(speaker => `
+                        <div class="speaker-section">
+                            <div class="speaker-header">
+                                <h4>${speaker.name}</h4>
+                                ${speaker.role ? `<span class="speaker-role">${speaker.role}</span>` : ''}
+                                ${speaker.speakingTime ? `<span class="speaking-time">Speaking Time: ${speaker.speakingTime}</span>` : ''}
+                            </div>
+                            ${speaker.keyPoints && speaker.keyPoints.length ? `
+                                <h5>Key Points</h5>
+                                <ul>
+                                    ${speaker.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                            ${speaker.talkingPoints && speaker.talkingPoints.length ? `
+                                <h5>Focus Areas</h5>
+                                <ul class="talking-points">
+                                    ${speaker.talkingPoints.map(point => `<li>${point}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                            ${speaker.bestQuote ? `
+                                <h5>Notable Quote</h5>
+                                <blockquote>${speaker.bestQuote}</blockquote>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Conversation Flow
+        if (data.conversationFlow) {
+            html += `
+                <div class="result-section">
+                    <h3>Conversation Flow</h3>
+                    <div class="flow-section">
+                        <h4>Opening</h4>
+                        <p>${data.conversationFlow.openingTopic}</p>
+                        ${data.conversationFlow.mainDiscussions && data.conversationFlow.mainDiscussions.length ? `
+                            <h4>Main Discussion Points</h4>
+                            <ol>
+                                ${data.conversationFlow.mainDiscussions.map(point => `<li>${point}</li>`).join('')}
+                            </ol>
+                        ` : ''}
+                        <h4>Closing</h4>
+                        <p>${data.conversationFlow.closingThoughts}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Podcast Metrics
+        if (data.podcastMetrics) {
+            html += `
+                <div class="result-section">
+                    <h3>Podcast Metrics</h3>
+                    <div class="metrics-grid">
+                        ${Object.entries(data.podcastMetrics)
+                            .filter(([key, value]) => !Array.isArray(value))
+                            .map(([key, value]) => `
+                                <div class="metric-item">
+                                    <div class="metric-label">${key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                    <div class="metric-value">${value}</div>
+                                </div>
+                            `).join('')}
+                    </div>
+                    ${data.podcastMetrics.technicalTermsUsed && data.podcastMetrics.technicalTermsUsed.length ? `
+                        <h4>Technical Terms Used</h4>
+                        <div class="tags">
+                            ${data.podcastMetrics.technicalTermsUsed.map(term => `
+                                <span class="tag">${term}</span>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Content Warnings
+        if (data.contentWarnings && data.contentWarnings.length) {
+            html += `
+                <div class="result-section warning-section">
+                    <h3>Content Notes</h3>
+                    <ul class="warning-list">
+                        ${data.contentWarnings.map(warning => `<li>${warning}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Actionable Insights
+        if (data.actionableInsights && data.actionableInsights.length) {
+            html += `
+                <div class="result-section">
+                    <h3>Key Takeaways</h3>
+                    <ul class="actionable-list">
+                        ${data.actionableInsights.map(insight => `<li>${insight}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Follow-up Topics
+        if (data.followUpTopics && data.followUpTopics.length) {
+            html += `
+                <div class="result-section">
+                    <h3>Potential Follow-up Topics</h3>
+                    <ul class="follow-up-list">
+                        ${data.followUpTopics.map(topic => `<li>${topic}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Resources Mentioned
+        if (data.resourcesMentioned) {
+            html += `
+                <div class="result-section">
+                    <h3>Resources Mentioned</h3>
+                    ${Object.entries(data.resourcesMentioned).map(([category, items]) => 
+                        items && items.length ? `
+                            <div class="resource-category">
+                                <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
+                                <ul>
+                                    ${items.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''
+                    ).join('')}
+                </div>
+            `;
+        }
+        
+        // Categories and Target Audience
+        if (data.podcastCategories) {
+            html += `
+                <div class="result-section">
+                    <h3>Podcast Categories</h3>
+                    <p><strong>Primary Category:</strong> ${data.podcastCategories.primaryCategory}</p>
+                    ${data.podcastCategories.subCategories && data.podcastCategories.subCategories.length ? `
+                        <p><strong>Sub-Categories:</strong> ${data.podcastCategories.subCategories.join(', ')}</p>
+                    ` : ''}
+                    ${data.podcastCategories.targetAudience && data.podcastCategories.targetAudience.length ? `
+                        <h4>Target Audience</h4>
+                        <ul class="audience-list">
+                            ${data.podcastCategories.targetAudience.map(audience => `<li>${audience}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        return html;
+    } catch (e) {
+        return `<div class="result-section">${analysis}</div>`;
+    }
+}
+
         async function analyzePdfWithClaude(text) {
-            const prompt = `Analyze this podcast transcript and provide insights in the following JSON format:
+const prompt = `Analyze this podcast transcript and provide comprehensive insights in the following JSON format:
 
 {
-    "podcastSummary": "A concise 2-3 sentence third-person summary of the overall podcast discussion. Make sure to reference the speakers name",
+    "podcastSummary": "A concise 2-3 sentence summary of the overall podcast discussion",
     
     "socialShareText": {
-        "twitter": "An engaging, catchy 280-character summary suitable for Twitter with the speaker's name",
-        "linkedin": "A professional, compelling 1-2 sentence summary suitable for LinkedIn with the speaker's name"
+        "twitter": "An engaging, catchy 280-character summary suitable for Twitter",
+        "linkedin": "A professional, compelling 1-2 sentence summary suitable for LinkedIn",
+        "instagram": "An engaging summary with relevant hashtags"
     },
+
+    "keyTopics": [
+        {
+            "topic": "Name of the topic",
+            "timestamp": "Approximate timestamp or location in conversation",
+            "duration": "Approximate duration of discussion",
+            "summary": "Brief summary of the discussion on this topic"
+        }
+    ],
     
     "speakerInsights": [
         {
             "name": "Speaker's name",
+            "role": "Speaker's role or expertise",
             "keyPoints": [
                 "3-4 main points or insights from this speaker"
             ],
-            "bestQuote": "Most impactful or meaningful quote from this speaker"
+            "bestQuote": "Most impactful or memorable quote from this speaker",
+            "talkingPoints": [
+                "List of main topics this speaker focused on"
+            ],
+            "speakingTime": "Approximate percentage of total conversation"
         }
     ],
+
+    "conversationFlow": {
+        "openingTopic": "How the conversation started",
+        "mainDiscussions": [
+            "Sequential flow of major discussion points"
+        ],
+        "closingThoughts": "How the conversation concluded"
+    },
     
+    "podcastMetrics": {
+        "estimatedDuration": "Approximate length of the podcast",
+        "speakerCount": "Number of unique speakers",
+        "topicsCount": "Number of distinct topics discussed",
+        "interactionType": "Type of conversation (interview, panel, debate, etc.)",
+        "technicalTermsUsed": [
+            "List of technical or specialized terms used"
+        ]
+    },
+
+    "contentWarnings": [
+        "Any sensitive topics or explicit content mentioned"
+    ],
+    
+    "actionableInsights": [
+        "List of practical takeaways or lessons for listeners"
+    ],
+
+    "followUpTopics": [
+        "Potential topics for future episodes based on unanswered questions or briefly touched subjects"
+    ],
+
     "podcastCategories": {
-        "primaryCategory": "Main category (e.g., Technology, Business, Science)",
+        "primaryCategory": "Main category",
         "subCategories": [
             "2-3 more specific subcategories"
+        ],
+        "targetAudience": [
+            "Types of listeners who would find this most valuable"
         ]
+    },
+
+    "resourcesMentioned": {
+        "books": ["Books mentioned"],
+        "links": ["Websites or resources discussed"],
+        "people": ["People referenced"],
+        "companies": ["Companies or organizations mentioned"]
     }
 }
 
 Important instructions:
-1. First identify different speakers from the transcript context
-2. For social text, make it engaging and include relevant hook/value proposition
-3. For quotes, prioritize unique, insightful, or memorable statements
-4. For categories, be specific but use standard category names
-5. Ensure speaker insights capture their unique perspectives and expertise
+1. Identify speakers and their roles from context
+2. Make social text engaging and include value proposition
+3. For quotes, prioritize insightful or memorable statements
+4. Use standard category names
+5. Be specific about timestamps and topic transitions
+6. Include any technical terms or jargon explained in the conversation
+7. Note any content warnings or sensitive topics
+8. Identify clear calls to action or takeaways
+9. Track all external references and resources
 
 Here is the podcast transcript to analyze:
 
