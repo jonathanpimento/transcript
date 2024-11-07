@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Analyzer</title>
+    <title>Podcast Transcript Analyzer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         body {
@@ -63,14 +63,69 @@
             border: 1px solid #e5e7eb;
         }
         .result-section h3 {
-            margin-top: 0;
-            color: #1f2937;
+            color: #1e3a8a;
+            font-size: 1.25rem;
+            margin: 0 0 1rem 0;
+        }
+        .result-section h4 {
+            color: #4b5563;
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+        .speaker-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 6px;
+        }
+        .speaker-section h4 {
+            color: #1e40af;
+            margin: 0 0 1rem 0;
+            font-size: 1.1rem;
+        }
+        .speaker-section h5 {
+            color: #4b5563;
+            margin: 1rem 0 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        blockquote {
+            border-left: 3px solid #2563eb;
+            margin: 0.5rem 0;
+            padding: 0.5rem 0 0.5rem 1rem;
+            font-style: italic;
+            color: #4b5563;
+        }
+        ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        .social-share {
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        .copy-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            float: right;
+        }
+        .copy-btn:hover {
+            background: #2563eb;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>PDF Analyzer</h1>
+        <h1>Podcast Transcript Analyzer</h1>
         
         <div>
             <label for="apiKey">Claude API Key:</label>
@@ -78,14 +133,14 @@
         </div>
 
         <div class="file-input-wrapper">
-            <label for="pdfFile">Select PDF:</label>
+            <label for="pdfFile">Select Transcript PDF:</label>
             <input type="file" id="pdfFile" accept=".pdf">
         </div>
 
-        <button id="analyzeBtn" disabled>Analyze PDF</button>
+        <button id="analyzeBtn" disabled>Analyze Transcript</button>
         
         <div id="loading" class="loading">
-            Analyzing PDF... This may take a few moments.
+            Analyzing transcript... This may take a few moments.
         </div>
         
         <div id="result"></div>
@@ -121,49 +176,86 @@
             return text;
         }
 
+        function addCopyButtons() {
+            document.querySelectorAll('.social-share').forEach(shareDiv => {
+                const text = shareDiv.textContent;
+                const copyBtn = document.createElement('button');
+                copyBtn.textContent = 'Copy';
+                copyBtn.className = 'copy-btn';
+                copyBtn.onclick = async () => {
+                    await navigator.clipboard.writeText(text);
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+                };
+                shareDiv.insertBefore(copyBtn, shareDiv.firstChild);
+            });
+        }
+
         function formatResults(analysis) {
             try {
                 const data = JSON.parse(analysis);
                 let html = '';
                 
-                if (data.summary) {
+                // Podcast Summary
+                if (data.podcastSummary) {
                     html += `
                         <div class="result-section">
-                            <h3>Executive Summary</h3>
-                            <p>${data.summary}</p>
+                            <h3>Podcast Summary</h3>
+                            <p>${data.podcastSummary}</p>
                         </div>
                     `;
                 }
                 
-                if (data.key_points && data.key_points.length) {
+                // Social Share Text
+                if (data.socialShareText) {
                     html += `
                         <div class="result-section">
-                            <h3>Key Points</h3>
-                            <ul>
-                                ${data.key_points.map(point => `<li>${point}</li>`).join('')}
-                            </ul>
+                            <h3>Social Media Content</h3>
+                            ${data.socialShareText.twitter ? `
+                                <h4>Twitter</h4>
+                                <div class="social-share">${data.socialShareText.twitter}</div>
+                            ` : ''}
+                            ${data.socialShareText.linkedin ? `
+                                <h4>LinkedIn</h4>
+                                <div class="social-share">${data.socialShareText.linkedin}</div>
+                            ` : ''}
                         </div>
                     `;
                 }
                 
-                if (data.insights && data.insights.length) {
+                // Speaker Insights
+                if (data.speakerInsights && data.speakerInsights.length) {
                     html += `
                         <div class="result-section">
-                            <h3>Key Insights</h3>
-                            <ul>
-                                ${data.insights.map(insight => `<li>${insight}</li>`).join('')}
-                            </ul>
+                            <h3>Speaker Insights</h3>
+                            ${data.speakerInsights.map(speaker => `
+                                <div class="speaker-section">
+                                    <h4>${speaker.name}</h4>
+                                    ${speaker.keyPoints && speaker.keyPoints.length ? `
+                                        <h5>Key Points</h5>
+                                        <ul>
+                                            ${speaker.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                                        </ul>
+                                    ` : ''}
+                                    ${speaker.bestQuote ? `
+                                        <h5>Notable Quote</h5>
+                                        <blockquote>${speaker.bestQuote}</blockquote>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
                         </div>
                     `;
                 }
                 
-                if (data.recommendations && data.recommendations.length) {
+                // Categories
+                if (data.podcastCategories) {
                     html += `
                         <div class="result-section">
-                            <h3>Recommendations</h3>
-                            <ul>
-                                ${data.recommendations.map(rec => `<li>${rec}</li>`).join('')}
-                            </ul>
+                            <h3>Podcast Categories</h3>
+                            <p><strong>Primary Category:</strong> ${data.podcastCategories.primaryCategory}</p>
+                            ${data.podcastCategories.subCategories && data.podcastCategories.subCategories.length ? `
+                                <p><strong>Sub-Categories:</strong> ${data.podcastCategories.subCategories.join(', ')}</p>
+                            ` : ''}
                         </div>
                     `;
                 }
@@ -175,23 +267,42 @@
         }
 
         async function analyzePdfWithClaude(text) {
-            const prompt = `Please analyze the following text from a PDF document. Provide a comprehensive analysis in JSON format with the following structure:
+            const prompt = `Analyze this podcast transcript and provide insights in the following JSON format:
+
 {
-    "summary": "A concise 2-3 sentence executive summary of the main content",
-    "key_points": [
-        "List of 3-5 main points or arguments from the text"
+    "podcastSummary": "A concise 2-3 sentence summary of the overall podcast discussion",
+    
+    "socialShareText": {
+        "twitter": "An engaging, catchy 280-character summary suitable for Twitter",
+        "linkedin": "A professional, compelling 1-2 sentence summary suitable for LinkedIn"
+    },
+    
+    "speakerInsights": [
+        {
+            "name": "Speaker's name",
+            "keyPoints": [
+                "3-4 main points or insights from this speaker"
+            ],
+            "bestQuote": "Most impactful or meaningful quote from this speaker"
+        }
     ],
-    "insights": [
-        "List of 2-3 meaningful insights or implications drawn from the content"
-    ],
-    "recommendations": [
-        "List of 2-3 actionable recommendations or next steps based on the content"
-    ]
+    
+    "podcastCategories": {
+        "primaryCategory": "Main category (e.g., Technology, Business, Science)",
+        "subCategories": [
+            "2-3 more specific subcategories"
+        ]
+    }
 }
 
-Make sure the analysis is specific to the content and avoid generic statements. If any section is not relevant to the content, you may omit it from the JSON structure.
+Important instructions:
+1. First identify different speakers from the transcript context
+2. For social text, make it engaging and include relevant hook/value proposition
+3. For quotes, prioritize unique, insightful, or memorable statements
+4. For categories, be specific but use standard category names
+5. Ensure speaker insights capture their unique perspectives and expertise
 
-Here is the text to analyze:
+Here is the podcast transcript to analyze:
 
 ${text}`;
 
@@ -232,6 +343,7 @@ ${text}`;
                 const text = await extractTextFromPdf(file);
                 const analysis = await analyzePdfWithClaude(text);
                 resultDiv.innerHTML = formatResults(analysis);
+                addCopyButtons();
             } catch (error) {
                 resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
             } finally {
