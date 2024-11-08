@@ -6,9 +6,9 @@
     <title>Podcast Transcript Analyzer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
-        body { font-family: system-ui; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+        body { font-family: system-ui; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; background: #575de8; }
         .container { background: #f9fafb; border-radius: 8px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        input, button { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; border-radius: 4px; }
+        input, button { width: 98%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; border-radius: 4px; }
         #analyzeBtn { background: #575de8;
     color: white;
     cursor: pointer;
@@ -325,7 +325,6 @@ ${text}`;
                     <h4>${platform.charAt(0).toUpperCase() + platform.slice(1)}</h4>
                     <div class="social-share">
                         ${text}
-                        <button class="copy-btn" onclick="navigator.clipboard.writeText('${text.replace(/'/g, "\\'")}')">Copy</button>
                     </div>
                 `).join('')}
             </div>
