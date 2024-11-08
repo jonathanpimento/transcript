@@ -21,7 +21,7 @@
         #analyzeBtn:disabled { background: #ececec; cursor: not-allowed; }
         .error { color: #dc2626; }
         .loading { display: none; color: #4b5563; }
-        .result-section { margin-top: 1rem; padding: 1rem; background: white; border-radius: 16px; border: 1px solid #e5e7eb; }
+        .result-section { margin-top: 1rem; padding: 1.2rem; background: white; border-radius: 16px; border: 1px solid #e5e7eb; }
         .social-share { background: #ececec; padding: 1rem; border-radius: 4px; position: relative; margin: 0.5rem 0; }
         .copy-btn { position: absolute; top: 8px; right: 8px; width: auto; background: #3b82f6; padding: 4px 8px; font-size: 0.75rem; }
         .speaker-section { background: #f8fafc; margin: 1rem 0; padding: 1rem; border-radius: 6px; }
@@ -53,7 +53,7 @@
 .metric-value {
     font-size: 1.125rem;
     font-weight: 500;
-    color: #1e40af;
+    color: #000;
 }
 .tags {
     display: flex;
@@ -61,11 +61,11 @@
     gap: 8px;
 }
 .warning-section {
-    background: #fff3cd;
-    border-color: #ffeeba;
+background: #fdeaea;
+    border-color: #dc2626;
 }
 .warning-list li {
-    color: #856404;
+    color: #dc2626;
 }
 .resource-category {
     margin-bottom: 1rem;
@@ -241,11 +241,11 @@ color: #909066;
     },
     
     "podcastMetrics": {
-        "estimatedDuration": "Approximate length of the podcast",
-        "speakerCount": "Number of unique speakers",
-        "topicsCount": "Number of distinct topics discussed",
-        "interactionType": "Type of conversation (interview, panel, debate, etc.)",
-        "technicalTermsUsed": ["List of technical, abbreviations or specialized terms used"]
+        "EstimatedDuration": "Approximate length of the podcast",
+        "SpeakerCount": "Number of unique speakers",
+        "TopicsCount": "Number of distinct topics discussed",
+        "InteractionType": "Type of conversation (interview, panel, debate, etc.)",
+        "TechnicalTermsUsed": ["List of technical, abbreviations or specialized terms used"]
     },
 
     "contentWarnings": ["Any sensitive topics, NSFW language or explicit content mentioned"],
