@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" height="50" viewBox="0 0 50 50">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="50" height="50.035" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-tile">
+      <rect width="50" height="50"/>
+    </clipPath>
+  </defs>
+  <g id="tile" clip-path="url(#clip-tile)">
+    <g id="Repeat_Grid_10" data-name="Repeat Grid 10" opacity="0.045" clip-path="url(#clip-path)" style="isolation: isolate">
+      <g transform="translate(-10 -90)">
+        <circle id="Ellipse_25251" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(0 -90)">
+        <circle id="Ellipse_25251-2" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(10 -90)">
+        <circle id="Ellipse_25251-3" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(20 -90)">
+        <circle id="Ellipse_25251-4" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(30 -90)">
+        <circle id="Ellipse_25251-5" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(-10 -80)">
+        <circle id="Ellipse_25251-6" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(0 -80)">
+        <circle id="Ellipse_25251-7" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(10 -80)">
+        <circle id="Ellipse_25251-8" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(20 -80)">
+        <circle id="Ellipse_25251-9" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(30 -80)">
+        <circle id="Ellipse_25251-10" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(-10 -70)">
+        <circle id="Ellipse_25251-11" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(0 -70)">
+        <circle id="Ellipse_25251-12" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(10 -70)">
+        <circle id="Ellipse_25251-13" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(20 -70)">
+        <circle id="Ellipse_25251-14" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(30 -70)">
+        <circle id="Ellipse_25251-15" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(-10 -60)">
+        <circle id="Ellipse_25251-16" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(0 -60)">
+        <circle id="Ellipse_25251-17" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(10 -60)">
+        <circle id="Ellipse_25251-18" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(20 -60)">
+        <circle id="Ellipse_25251-19" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(30 -60)">
+        <circle id="Ellipse_25251-20" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(-10 -50)">
+        <circle id="Ellipse_25251-21" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(0 -50)">
+        <circle id="Ellipse_25251-22" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(10 -50)">
+        <circle id="Ellipse_25251-23" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(20 -50)">
+        <circle id="Ellipse_25251-24" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(30 -50)">
+        <circle id="Ellipse_25251-25" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(-10 -40)">
+        <circle id="Ellipse_25251-26" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(0 -40)">
+        <circle id="Ellipse_25251-27" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(10 -40)">
+        <circle id="Ellipse_25251-28" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(20 -40)">
+        <circle id="Ellipse_25251-29" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+      <g transform="translate(30 -40)">
+        <circle id="Ellipse_25251-30" data-name="Ellipse 25251" cx="2" cy="2" r="2" transform="translate(10 90)" fill="#686df4"/>
+      </g>
+    </g>
+  </g>
+</svg>
