@@ -20,6 +20,69 @@
         blockquote { border-left: 3px solid #2563eb; margin: 0.5rem 0; padding-left: 1rem; font-style: italic; color: #4b5563; }
         .tag { display: inline-block; background: #e5e7eb; padding: 4px 12px; border-radius: 16px; margin: 0.25rem; }
         .timeline-item { padding-left: 1.5rem; border-left: 2px solid #2563eb; margin: 1rem 0; }
+        .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.metric-item {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 6px;
+}
+.metric-label {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 4px;
+}
+.metric-value {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #1e40af;
+}
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.warning-section {
+    background: #fff3cd;
+    border-color: #ffeeba;
+}
+.warning-list li {
+    color: #856404;
+}
+.resource-category {
+    margin-bottom: 1rem;
+}
+.timeline-meta {
+    margin: 0.5rem 0;
+    display: flex;
+    gap: 8px;
+}
+h4 {
+    margin: 1rem 0 0.5rem 0;
+    color: #1e40af;
+}
+h5 {
+    margin: 1rem 0 0.5rem 0;
+    color: #4b5563;
+}
+.actionable-list li {
+    background: #f0fdf4;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #22c55e;
+}
+.follow-up-list li {
+    background: #faf5ff;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #8b5cf6;
+}
     </style>
 </head>
 <body>
@@ -96,50 +159,169 @@
             return (await response.json()).content[0].text;
         }
 
-        function formatResults(analysis) {
-            try {
-                const data = JSON.parse(analysis);
-                return `
-                    <div class="result-section">
-                        <h3>Podcast Summary</h3>
-                        <p>${data.podcastSummary}</p>
+      function formatResults(analysis) {
+    try {
+        const data = JSON.parse(analysis);
+        return `
+            <div class="result-section">
+                <h3>Podcast Summary</h3>
+                <p>${data.podcastSummary}</p>
+            </div>
+
+            <div class="result-section">
+                <h3>Social Media Content</h3>
+                ${Object.entries(data.socialShareText).map(([platform, text]) => `
+                    <h4>${platform.charAt(0).toUpperCase() + platform.slice(1)}</h4>
+                    <div class="social-share">
+                        ${text}
+                        <button class="copy-btn" onclick="navigator.clipboard.writeText('${text.replace(/'/g, "\\'")}')">Copy</button>
                     </div>
-                    ${Object.entries(data.socialShareText).map(([platform, text]) => `
-                        <div class="result-section">
-                            <h3>${platform.charAt(0).toUpperCase() + platform.slice(1)}</h3>
-                            <div class="social-share">
-                                ${text}
-                                <button class="copy-btn" onclick="navigator.clipboard.writeText('${text}')">Copy</button>
+                `).join('')}
+            </div>
+
+            <div class="result-section">
+                <h3>Speaker Insights</h3>
+                ${data.speakerInsights.map(speaker => `
+                    <div class="speaker-section">
+                        <h4>${speaker.name}</h4>
+                        ${speaker.role ? `<div class="tag">${speaker.role}</div>` : ''}
+                        ${speaker.speakingTime ? `<div class="tag">Speaking Time: ${speaker.speakingTime}</div>` : ''}
+                        ${speaker.keyPoints?.length ? `
+                            <h5>Key Points</h5>
+                            <ul>${speaker.keyPoints.map(point => `<li>${point}</li>`).join('')}</ul>
+                        ` : ''}
+                        ${speaker.talkingPoints?.length ? `
+                            <h5>Main Topics</h5>
+                            <div class="tags">
+                                ${speaker.talkingPoints.map(point => `<span class="tag">${point}</span>`).join('')}
                             </div>
+                        ` : ''}
+                        ${speaker.bestQuote ? `
+                            <h5>Notable Quote</h5>
+                            <blockquote>${speaker.bestQuote}</blockquote>
+                        ` : ''}
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="result-section">
+                <h3>Discussion Timeline</h3>
+                ${data.keyTopics.map(topic => `
+                    <div class="timeline-item">
+                        <h4>${topic.topic}</h4>
+                        <div class="timeline-meta">
+                            ${topic.timestamp ? `<span class="tag">${topic.timestamp}</span>` : ''}
+                            ${topic.duration ? `<span class="tag">${topic.duration}</span>` : ''}
                         </div>
-                    `).join('')}
-                    <div class="result-section">
-                        <h3>Speaker Insights</h3>
-                        ${data.speakerInsights.map(speaker => `
-                            <div class="speaker-section">
-                                <h4>${speaker.name}</h4>
-                                ${speaker.role ? `<div class="tag">${speaker.role}</div>` : ''}
-                                <ul>${speaker.keyPoints.map(point => `<li>${point}</li>`).join('')}</ul>
-                                ${speaker.bestQuote ? `<blockquote>${speaker.bestQuote}</blockquote>` : ''}
-                            </div>
-                        `).join('')}
+                        <p>${topic.summary}</p>
                     </div>
-                    <div class="result-section">
-                        <h3>Discussion Timeline</h3>
-                        ${data.keyTopics.map(topic => `
-                            <div class="timeline-item">
-                                <h4>${topic.topic}</h4>
-                                <div class="tag">${topic.timestamp}</div>
-                                <p>${topic.summary}</p>
-                            </div>
-                        `).join('')}
+                `).join('')}
+            </div>
+
+            ${data.conversationFlow ? `
+                <div class="result-section">
+                    <h3>Conversation Flow</h3>
+                    <h4>Opening</h4>
+                    <p>${data.conversationFlow.openingTopic}</p>
+                    ${data.conversationFlow.mainDiscussions?.length ? `
+                        <h4>Main Discussions</h4>
+                        <ol>${data.conversationFlow.mainDiscussions.map(point => `<li>${point}</li>`).join('')}</ol>
+                    ` : ''}
+                    <h4>Closing Thoughts</h4>
+                    <p>${data.conversationFlow.closingThoughts}</p>
+                </div>
+            ` : ''}
+
+            ${data.podcastMetrics ? `
+                <div class="result-section">
+                    <h3>Podcast Metrics</h3>
+                    <div class="metrics-grid">
+                        ${Object.entries(data.podcastMetrics)
+                            .filter(([key, value]) => typeof value !== 'object')
+                            .map(([key, value]) => `
+                                <div class="metric-item">
+                                    <div class="metric-label">${key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                    <div class="metric-value">${value}</div>
+                                </div>
+                            `).join('')}
                     </div>
-                `;
-            } catch (e) {
-                console.error('Error formatting results:', e);
-                return `<div class="error">Error formatting results: ${e.message}</div>`;
-            }
-        }
+                    ${data.podcastMetrics.technicalTermsUsed?.length ? `
+                        <h4>Technical Terms Used</h4>
+                        <div class="tags">
+                            ${data.podcastMetrics.technicalTermsUsed.map(term => `<span class="tag">${term}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            ` : ''}
+
+            ${data.contentWarnings?.length ? `
+                <div class="result-section warning-section">
+                    <h3>Content Notes</h3>
+                    <ul class="warning-list">
+                        ${data.contentWarnings.map(warning => `<li>${warning}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+
+            ${data.actionableInsights?.length ? `
+                <div class="result-section">
+                    <h3>Key Takeaways</h3>
+                    <ul class="actionable-list">
+                        ${data.actionableInsights.map(insight => `<li>${insight}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+
+            ${data.followUpTopics?.length ? `
+                <div class="result-section">
+                    <h3>Potential Follow-up Topics</h3>
+                    <ul class="follow-up-list">
+                        ${data.followUpTopics.map(topic => `<li>${topic}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+
+            ${data.resourcesMentioned ? `
+                <div class="result-section">
+                    <h3>Resources Mentioned</h3>
+                    ${Object.entries(data.resourcesMentioned).map(([category, items]) => 
+                        items?.length ? `
+                            <div class="resource-category">
+                                <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
+                                <ul>
+                                    ${items.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''
+                    ).join('')}
+                </div>
+            ` : ''}
+
+            ${data.podcastCategories ? `
+                <div class="result-section">
+                    <h3>Categories & Audience</h3>
+                    ${data.podcastCategories.primaryCategory ? `
+                        <p><strong>Primary Category:</strong> ${data.podcastCategories.primaryCategory}</p>
+                    ` : ''}
+                    ${data.podcastCategories.subCategories?.length ? `
+                        <p><strong>Sub-Categories:</strong> ${data.podcastCategories.subCategories.join(', ')}</p>
+                    ` : ''}
+                    ${data.podcastCategories.targetAudience?.length ? `
+                        <h4>Target Audience</h4>
+                        <div class="tags">
+                            ${data.podcastCategories.targetAudience.map(audience => 
+                                `<span class="tag">${audience}</span>`
+                            ).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            ` : ''}
+        `;
+    } catch (e) {
+        console.error('Error formatting results:', e);
+        return `<div class="error">Error formatting results: ${e.message}</div>`;
+    }
+} 
 
         analyzeBtn.addEventListener('click', async () => {
             try {
