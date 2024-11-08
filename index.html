@@ -426,11 +426,76 @@
     margin-bottom: 0.5rem;
     border-left: 4px solid #8b5cf6;
 }
+/* Essential styles */
+.result-section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.speaker-section {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 6px;
+}
+
+.social-share {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f0f9ff;
+    border-radius: 4px;
+    position: relative;
+}
+
+.timeline-item {
+    margin: 15px 0;
+    padding: 10px;
+    border-left: 3px solid #2563eb;
+    background: #f8fafc;
+}
+
+.error {
+    color: red;
+    padding: 10px;
+    background: #fff5f5;
+    border: 1px solid #fc8181;
+    border-radius: 4px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 2px;
+    background: #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+blockquote {
+    margin: 10px 0;
+    padding-left: 15px;
+    border-left: 3px solid #2563eb;
+    color: #4a5568;
+}
+
+.speaker-role {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    margin: 5px 0;
+}
+
 </style>
+
+
 </head>
 <body>
     <div class="container">
-        <h1>Podcast Transcript Analyzer Deep</h1>
+        <h1>Podcast Transcript Analyzer Ready</h1>
         
         <div>
             <label for="apiKey">Claude API Key:</label>
@@ -498,10 +563,11 @@
 
 function formatResults(analysis) {
     try {
+        console.log('Raw analysis:', analysis); // Debug log
         const data = JSON.parse(analysis);
         let html = '';
-        
-        // Podcast Summary
+
+        // Basic sections first
         if (data.podcastSummary) {
             html += `
                 <div class="result-section">
@@ -510,158 +576,98 @@ function formatResults(analysis) {
                 </div>
             `;
         }
-        
-        // Social Share Text
+
+        // Social Media Content
         if (data.socialShareText) {
             html += `
                 <div class="result-section">
                     <h3>Social Media Content</h3>
-                    ${Object.entries(data.socialShareText).map(([platform, text]) => `
-                        <h4>${platform.charAt(0).toUpperCase() + platform.slice(1)}</h4>
-                        <div class="social-share">${text}</div>
-                    `).join('')}
-                </div>
-            `;
+                `;
+            
+            if (data.socialShareText.twitter) {
+                html += `
+                    <div class="social-share">
+                        <h4>Twitter</h4>
+                        <p>${data.socialShareText.twitter}</p>
+                    </div>
+                `;
+            }
+            
+            if (data.socialShareText.linkedin) {
+                html += `
+                    <div class="social-share">
+                        <h4>LinkedIn</h4>
+                        <p>${data.socialShareText.linkedin}</p>
+                    </div>
+                `;
+            }
+            
+            if (data.socialShareText.instagram) {
+                html += `
+                    <div class="social-share">
+                        <h4>Instagram</h4>
+                        <p>${data.socialShareText.instagram}</p>
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
         }
 
-        // Key Topics Timeline
-        if (data.keyTopics && data.keyTopics.length) {
-            html += `
-                <div class="result-section">
-                    <h3>Discussion Timeline</h3>
-                    <div class="timeline">
-                        ${data.keyTopics.map(topic => `
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h4>${topic.topic}</h4>
-                                    <div class="timeline-meta">
-                                        <span class="timestamp">${topic.timestamp}</span>
-                                        <span class="duration">${topic.duration}</span>
-                                    </div>
-                                    <p>${topic.summary}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
         // Speaker Insights
         if (data.speakerInsights && data.speakerInsights.length) {
             html += `
                 <div class="result-section">
                     <h3>Speaker Insights</h3>
-                    ${data.speakerInsights.map(speaker => `
-                        <div class="speaker-section">
-                            <div class="speaker-header">
-                                <h4>${speaker.name}</h4>
-                                ${speaker.role ? `<span class="speaker-role">${speaker.role}</span>` : ''}
-                                ${speaker.speakingTime ? `<span class="speaking-time">Speaking Time: ${speaker.speakingTime}</span>` : ''}
-                            </div>
-                            ${speaker.keyPoints && speaker.keyPoints.length ? `
+            `;
+            
+            data.speakerInsights.forEach(speaker => {
+                html += `
+                    <div class="speaker-section">
+                        <h4>${speaker.name || 'Unknown Speaker'}</h4>
+                        ${speaker.role ? `<div class="speaker-role">${speaker.role}</div>` : ''}
+                        
+                        ${speaker.keyPoints && speaker.keyPoints.length ? `
+                            <div class="key-points">
                                 <h5>Key Points</h5>
                                 <ul>
                                     ${speaker.keyPoints.map(point => `<li>${point}</li>`).join('')}
                                 </ul>
-                            ` : ''}
-                            ${speaker.talkingPoints && speaker.talkingPoints.length ? `
-                                <h5>Focus Areas</h5>
-                                <ul class="talking-points">
-                                    ${speaker.talkingPoints.map(point => `<li>${point}</li>`).join('')}
-                                </ul>
-                            ` : ''}
-                            ${speaker.bestQuote ? `
+                            </div>
+                        ` : ''}
+                        
+                        ${speaker.bestQuote ? `
+                            <div class="quote">
                                 <h5>Notable Quote</h5>
                                 <blockquote>${speaker.bestQuote}</blockquote>
-                            ` : ''}
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        // Conversation Flow
-        if (data.conversationFlow) {
-            html += `
-                <div class="result-section">
-                    <h3>Conversation Flow</h3>
-                    <div class="flow-section">
-                        <h4>Opening</h4>
-                        <p>${data.conversationFlow.openingTopic}</p>
-                        ${data.conversationFlow.mainDiscussions && data.conversationFlow.mainDiscussions.length ? `
-                            <h4>Main Discussion Points</h4>
-                            <ol>
-                                ${data.conversationFlow.mainDiscussions.map(point => `<li>${point}</li>`).join('')}
-                            </ol>
+                            </div>
                         ` : ''}
-                        <h4>Closing</h4>
-                        <p>${data.conversationFlow.closingThoughts}</p>
                     </div>
-                </div>
-            `;
+                `;
+            });
+            
+            html += `</div>`;
         }
 
-        // Podcast Metrics
-        if (data.podcastMetrics) {
+        // Key Topics
+        if (data.keyTopics && data.keyTopics.length) {
             html += `
                 <div class="result-section">
-                    <h3>Podcast Metrics</h3>
-                    <div class="metrics-grid">
-                        ${Object.entries(data.podcastMetrics)
-                            .filter(([key, value]) => !Array.isArray(value))
-                            .map(([key, value]) => `
-                                <div class="metric-item">
-                                    <div class="metric-label">${key.replace(/([A-Z])/g, ' $1').trim()}</div>
-                                    <div class="metric-value">${value}</div>
+                    <h3>Key Topics</h3>
+                    <div class="timeline">
+                        ${data.keyTopics.map(topic => `
+                            <div class="timeline-item">
+                                <div class="timeline-content">
+                                    <h4>${topic.topic}</h4>
+                                    <p>${topic.summary}</p>
+                                    <div class="topic-meta">
+                                        <span>${topic.timestamp || ''}</span>
+                                        ${topic.duration ? `<span>${topic.duration}</span>` : ''}
+                                    </div>
                                 </div>
-                            `).join('')}
+                            </div>
+                        `).join('')}
                     </div>
-                    ${data.podcastMetrics.technicalTermsUsed && data.podcastMetrics.technicalTermsUsed.length ? `
-                        <h4>Technical Terms Used</h4>
-                        <div class="tags">
-                            ${data.podcastMetrics.technicalTermsUsed.map(term => `
-                                <span class="tag">${term}</span>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        // Content Warnings
-        if (data.contentWarnings && data.contentWarnings.length) {
-            html += `
-                <div class="result-section warning-section">
-                    <h3>Content Notes</h3>
-                    <ul class="warning-list">
-                        ${data.contentWarnings.map(warning => `<li>${warning}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-        }
-
-        // Actionable Insights
-        if (data.actionableInsights && data.actionableInsights.length) {
-            html += `
-                <div class="result-section">
-                    <h3>Key Takeaways</h3>
-                    <ul class="actionable-list">
-                        ${data.actionableInsights.map(insight => `<li>${insight}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-        }
-
-        // Follow-up Topics
-        if (data.followUpTopics && data.followUpTopics.length) {
-            html += `
-                <div class="result-section">
-                    <h3>Potential Follow-up Topics</h3>
-                    <ul class="follow-up-list">
-                        ${data.followUpTopics.map(topic => `<li>${topic}</li>`).join('')}
-                    </ul>
                 </div>
             `;
         }
@@ -671,42 +677,63 @@ function formatResults(analysis) {
             html += `
                 <div class="result-section">
                     <h3>Resources Mentioned</h3>
-                    ${Object.entries(data.resourcesMentioned).map(([category, items]) => 
-                        items && items.length ? `
-                            <div class="resource-category">
-                                <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
-                                <ul>
-                                    ${items.map(item => `<li>${item}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''
-                    ).join('')}
-                </div>
             `;
+            
+            for (const [category, items] of Object.entries(data.resourcesMentioned)) {
+                if (items && items.length && items[0] !== '') {
+                    html += `
+                        <div class="resource-category">
+                            <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
+                            <ul>
+                                ${items.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+            }
+            
+            html += `</div>`;
         }
-        
+
         // Categories and Target Audience
         if (data.podcastCategories) {
             html += `
                 <div class="result-section">
-                    <h3>Podcast Categories</h3>
-                    <p><strong>Primary Category:</strong> ${data.podcastCategories.primaryCategory}</p>
+                    <h3>Categories & Audience</h3>
+                    ${data.podcastCategories.primaryCategory ? `
+                        <p><strong>Primary Category:</strong> ${data.podcastCategories.primaryCategory}</p>
+                    ` : ''}
                     ${data.podcastCategories.subCategories && data.podcastCategories.subCategories.length ? `
                         <p><strong>Sub-Categories:</strong> ${data.podcastCategories.subCategories.join(', ')}</p>
                     ` : ''}
                     ${data.podcastCategories.targetAudience && data.podcastCategories.targetAudience.length ? `
-                        <h4>Target Audience</h4>
-                        <ul class="audience-list">
-                            ${data.podcastCategories.targetAudience.map(audience => `<li>${audience}</li>`).join('')}
-                        </ul>
+                        <div class="target-audience">
+                            <h4>Target Audience</h4>
+                            <div class="tags">
+                                ${data.podcastCategories.targetAudience.map(audience => 
+                                    `<span class="tag">${audience}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
                     ` : ''}
                 </div>
             `;
         }
-        
+
+        // If we have no content at all
+        if (!html) {
+            return '<div class="error">No analysis results available</div>';
+        }
+
         return html;
     } catch (e) {
-        return `<div class="result-section">${analysis}</div>`;
+        console.error('Error formatting results:', e);
+        return `
+            <div class="error">
+                Error formatting analysis results: ${e.message}<br>
+                Raw response: ${analysis}
+            </div>
+        `;
     }
 }
 
