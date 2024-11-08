@@ -9,8 +9,16 @@
         body { font-family: system-ui; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
         .container { background: #f9fafb; border-radius: 8px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         input, button { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; border-radius: 4px; }
-        #analyzeBtn { background: #2563eb; color: white; cursor: pointer; font-weight: 500; }
-        #analyzeBtn:disabled { background: #93c5fd; cursor: not-allowed; }
+        #analyzeBtn { background: #575de8;
+    color: white;
+    cursor: pointer;
+    width: 20%;
+    padding: 15px;
+    margin-left: 40%;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: system-ui; }
+        #analyzeBtn:disabled { background: #ececec; cursor: not-allowed; }
         .error { color: #dc2626; }
         .loading { display: none; color: #4b5563; }
         .result-section { margin-top: 1rem; padding: 1rem; background: white; border-radius: 4px; border: 1px solid #e5e7eb; }
@@ -95,10 +103,9 @@ h5 {
 }
 
 .file-input-wrapper label {
-    display: block;
+display: block;
     padding: 10px 15px;
-    background: #f3f4f6;
-    border: 2px dashed #d1d5db;
+    background: #292929;
     border-radius: 6px;
     text-align: center;
     cursor: pointer;
@@ -106,8 +113,7 @@ h5 {
 }
 
 .file-input-wrapper label:hover {
-    background: #e5e7eb;
-    border-color: #9ca3af;
+    background: #000;
 }
 
 .file-input-wrapper label:active {
@@ -117,31 +123,61 @@ h5 {
 .file-input-wrapper .file-name {
     margin-top: 8px;
     font-size: 0.875rem;
-    color: #4b5563;
+    color: #929292;
     text-align: center;
 }
 
 .file-input-wrapper label::before {
-    content: '📄 Choose PDF';
+    content: 'Upload Episode Transcript';
     font-weight: 500;
-    color: #1f2937;
+    color: #fff;
 }
 
 .file-input-wrapper.has-file label::before {
-    content: 'Change PDF';
+    content: 'Change Podcast Episode';
 }
+                .project-description{
+   margin-left: 20%;
+    margin-right: 20%;
+    text-align: center;
+    margin-bottom: 5%;
+    background-color: #ececec;
+    padding: 2%;
+    border-radius: 12px;
+        }
+        .projects-button a{
+color: #909066;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    background-color: #000000;
+    padding: 12px;
+    border-radius: 30px;
+        }
+                h1 {
+            text-align: center;
+            color: var(--text-primary);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Podcast Transcript Analyzer Async</h1>
-        <input type="password" id="apiKey" placeholder="Enter Claude API key">
+            <div class="nav">
+        <div class="projects-button"><a href="index.html">All Projects</a></div>
+    </div>
+        <h1>Podcast Episode AI</h1>
+         <p class="project-description">Generate a summary, speaker highlights, chapters, conversation flows, category tags and several other insights from your Podcast recording in seconds.</p>
+    
+        <input type="password" id="apiKey" placeholder="Enter API key">
 <div class="file-input-wrapper">
     <input type="file" id="pdfFile" accept=".pdf">
     <label for="pdfFile"></label>
 </div>
-        <button id="analyzeBtn" disabled>Analyze Transcript</button>
-        <div id="loading" class="loading">Analyzing transcript...</div>
+        <button id="analyzeBtn" disabled>Generate</button>
+        <div id="loading" class="loading">Analyzing episode...</div>
         <div id="result"></div>
     </div>
 
@@ -273,12 +309,12 @@ ${text}`;
         const data = JSON.parse(analysis);
         return `
             <div class="result-section">
-                <h3>Podcast Summary</h3>
+                <h3>Podcast Episode Summary</h3>
                 <p>${data.podcastSummary}</p>
             </div>
 
             <div class="result-section">
-                <h3>Social Media Content</h3>
+                <h3>Social Media Snippets</h3>
                 ${Object.entries(data.socialShareText).map(([platform, text]) => `
                     <h4>${platform.charAt(0).toUpperCase() + platform.slice(1)}</h4>
                     <div class="social-share">
@@ -289,14 +325,14 @@ ${text}`;
             </div>
 
             <div class="result-section">
-                <h3>Speaker Insights</h3>
+                <h3>Speaker Introduction</h3>
                 ${data.speakerInsights.map(speaker => `
                     <div class="speaker-section">
                         <h4>${speaker.name}</h4>
                         ${speaker.role ? `<div class="tag">${speaker.role}</div>` : ''}
                         ${speaker.speakingTime ? `<div class="tag">Speaking Time: ${speaker.speakingTime}</div>` : ''}
                         ${speaker.keyPoints?.length ? `
-                            <h5>Key Points</h5>
+                            <h5>Highlights</h5>
                             <ul>${speaker.keyPoints.map(point => `<li>${point}</li>`).join('')}</ul>
                         ` : ''}
                         ${speaker.talkingPoints?.length ? `
@@ -314,7 +350,7 @@ ${text}`;
             </div>
 
             <div class="result-section">
-                <h3>Discussion Timeline</h3>
+                <h3>Podcast Episode Chapters</h3>
                 ${data.keyTopics.map(topic => `
                     <div class="timeline-item">
                         <h4>${topic.topic}</h4>
@@ -329,7 +365,7 @@ ${text}`;
 
             ${data.conversationFlow ? `
                 <div class="result-section">
-                    <h3>Conversation Flow</h3>
+                    <h3>Episode Flow</h3>
                     <h4>Opening</h4>
                     <p>${data.conversationFlow.openingTopic}</p>
                     ${data.conversationFlow.mainDiscussions?.length ? `
@@ -343,7 +379,7 @@ ${text}`;
 
             ${data.podcastMetrics ? `
                 <div class="result-section">
-                    <h3>Podcast Metrics</h3>
+                    <h3>Episode Insights</h3>
                     <div class="metrics-grid">
                         ${Object.entries(data.podcastMetrics)
                             .filter(([key, value]) => typeof value !== 'object')
@@ -365,7 +401,7 @@ ${text}`;
 
             ${data.contentWarnings?.length ? `
                 <div class="result-section warning-section">
-                    <h3>Content Notes</h3>
+                    <h3>NSFW & Explicit Content</h3>
                     <ul class="warning-list">
                         ${data.contentWarnings.map(warning => `<li>${warning}</li>`).join('')}
                     </ul>
@@ -383,7 +419,7 @@ ${text}`;
 
             ${data.followUpTopics?.length ? `
                 <div class="result-section">
-                    <h3>Potential Follow-up Topics</h3>
+                    <h3>Next Episode Topics</h3>
                     <ul class="follow-up-list">
                         ${data.followUpTopics.map(topic => `<li>${topic}</li>`).join('')}
                     </ul>
