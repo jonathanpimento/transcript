@@ -120,8 +120,7 @@
         .copy-btn:hover {
             background: #2563eb;
         }
-        <style>
-/* Timeline styles */
+        /* Timeline styles */
 .timeline {
     position: relative;
     padding: 20px 0;
@@ -141,6 +140,7 @@
     border-radius: 50%;
     background: #2563eb;
     border: 2px solid #fff;
+    box-shadow: 0 0 0 4px #dbeafe;
 }
 
 .timeline-item:before {
@@ -158,19 +158,33 @@
 }
 
 .timeline-content {
-    padding: 10px;
+    padding: 15px;
     background: #f8fafc;
     border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .timeline-meta {
     font-size: 0.875rem;
     color: #6b7280;
     margin-bottom: 8px;
+    display: flex;
+    gap: 16px;
 }
 
 .timeline-meta span {
-    margin-right: 16px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.timestamp:before {
+    content: '🕒';
+    margin-right: 4px;
+}
+
+.duration:before {
+    content: '⌛';
+    margin-right: 4px;
 }
 
 /* Speaker section enhancements */
@@ -179,6 +193,7 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 .speaker-role {
@@ -187,11 +202,13 @@
     background: #f3f4f6;
     padding: 2px 8px;
     border-radius: 12px;
+    white-space: nowrap;
 }
 
 .speaking-time {
     font-size: 0.875rem;
     color: #6b7280;
+    margin-left: auto;
 }
 
 /* Metrics grid */
@@ -206,12 +223,20 @@
     background: #f8fafc;
     padding: 1rem;
     border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s ease;
+}
+
+.metric-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .metric-label {
     font-size: 0.875rem;
     color: #4b5563;
     margin-bottom: 4px;
+    text-transform: capitalize;
 }
 
 .metric-value {
@@ -231,9 +256,14 @@
 .tag {
     background: #e5e7eb;
     color: #4b5563;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 4px 12px;
+    border-radius: 16px;
     font-size: 0.875rem;
+    transition: background-color 0.2s ease;
+}
+
+.tag:hover {
+    background: #d1d5db;
 }
 
 /* Warning section */
@@ -242,30 +272,167 @@
     border-color: #ffeeba;
 }
 
+.warning-section h3 {
+    color: #856404;
+}
+
 .warning-list li {
     color: #856404;
 }
 
 /* Resource categories */
 .resource-category {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 6px;
 }
 
 .resource-category h4 {
-    color: #4b5563;
-    margin-bottom: 0.5rem;
+    color: #1e40af;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.resource-category ul {
+    columns: 2;
+    column-gap: 2rem;
+}
+
+@media (max-width: 640px) {
+    .resource-category ul {
+        columns: 1;
+    }
 }
 
 /* Audience list */
-        .audience {
-            color: #4b5563;
+.audience-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+}
+
+.audience-list li {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.875rem;
+}
+
+/* Social share enhancements */
+.social-share {
+    position: relative;
+    background: #f0f9ff;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: #2563eb;
+}
+
+/* Flow section */
+.flow-section ol {
+    position: relative;
+    counter-reset: flow-counter;
+    list-style: none;
+    padding-left: 2rem;
+}
+
+.flow-section ol li {
+    counter-increment: flow-counter;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.flow-section ol li:before {
+    content: counter(flow-counter);
+    position: absolute;
+    left: -2rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+}
+
+/* Key points and insights */
+.speaker-section ul:not(.talking-points) li {
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.speaker-section ul:not(.talking-points) li:before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #2563eb;
+}
+
+.talking-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+}
+
+.talking-points li {
+    background: #f3f4f6;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+/* Actionable insights */
+.actionable-list li {
+    background: #f0fdf4;
+    padding: 1rem;
+    border-radius: 6px;
     margin-bottom: 0.5rem;
-        }
+    border-left: 4px solid #22c55e;
+}
+
+/* Follow-up topics */
+.follow-up-list li {
+    background: #faf5ff;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #8b5cf6;
+}
+</style>
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Podcast Transcript Analyzer 2</h1>
+        <h1>Podcast Transcript Analyzer Deep</h1>
         
         <div>
             <label for="apiKey">Claude API Key:</label>
