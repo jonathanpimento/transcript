@@ -167,17 +167,17 @@ h5 {
     const prompt = `Analyze this podcast transcript and provide insights in the following JSON format. It's critical to include ALL sections in the response:
 
 {
-    "podcastSummary": "A concise 2-3 sentence summary of the overall podcast discussion",
+    "podcastSummary": "A concise 2-3 sentence summary of the overall podcast discussion. Make sure to reference the host or speaker in third-person.",
     
     "socialShareText": {
-        "twitter": "An engaging, catchy 280-character summary suitable for Twitter",
-        "linkedin": "A professional, compelling 1-2 sentence summary suitable for LinkedIn"
+        "twitter": "An engaging, catchy 280-character summary suitable for Twitter including the host and speaker names",
+        "linkedin": "A professional, compelling 1-2 sentence summary suitable for LinkedIn including the host and speaker names"
     },
 
     "keyTopics": [
         {
             "topic": "Name of the topic",
-            "timestamp": "Approximate timestamp or location in conversation",
+            "timestamp": "Approximate timestamp or location in conversation. Try to provide the start and end timestamp",
             "duration": "Approximate duration of discussion",
             "summary": "Brief summary of the discussion on this topic"
         }
@@ -203,10 +203,10 @@ h5 {
         "speakerCount": "Number of unique speakers",
         "topicsCount": "Number of distinct topics discussed",
         "interactionType": "Type of conversation (interview, panel, debate, etc.)",
-        "technicalTermsUsed": ["List of technical or specialized terms used"]
+        "technicalTermsUsed": ["List of technical, abbreviations or specialized terms used"]
     },
 
-    "contentWarnings": ["Any sensitive topics or explicit content mentioned"],
+    "contentWarnings": ["Any sensitive topics, NSFW language or explicit content mentioned"],
     
     "actionableInsights": ["List of practical takeaways or lessons for listeners"],
 
@@ -214,7 +214,7 @@ h5 {
 
     "resourcesMentioned": {
         "books": ["Books mentioned"],
-        "links": ["Websites or resources discussed"],
+        "links": ["Websites or resources discussed. Try to capture the URL"],
         "people": ["People referenced"],
         "companies": ["Companies or organizations mentioned"]
     },
