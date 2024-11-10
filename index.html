@@ -15,7 +15,7 @@
             font-family: system-ui;
             line-height: 1.5;
             background: #edeeff;
-            background-image: url("bg.svg");
+            background-image: url("assets/bg.svg");
             background-repeat: repeat;
             margin: 0px;
         }
@@ -75,7 +75,7 @@
         }
 
         .social-share {
-            background: #ececec;
+            background: #f8fafc;
             padding: 1rem;
             border-radius: 4px;
             position: relative;
@@ -311,6 +311,23 @@
             width: 32px;
             margin-right: 8px;
         }
+
+        .mini-wand {
+            width: 22px;
+            margin-right: 4px;
+        }
+
+        .banner {
+            color: #838494;
+            background: #edeeff;
+            padding: 10px 20px 10px 20px;
+            margin: 10px 0px 10px 0px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: medium;
+            line-height: 18px;
+        }
+
     </style>
 </head>
 
@@ -327,9 +344,10 @@
         <div class="pill-links"> <a href="#p-suggestion">Suggestions</a></div>
         <div class="pill-links"> <a href="#p-resources">Resources</a></div>
         <div class="pill-links"> <a href="#p-tags">Tags</a></div>
+        <div class="pill-links"> <a href="https://jonathanpimento.github.io/claude-experiments/">Back</a></div>
     </div>
     <div class="container">
-        <h1> <img src="wand.svg" class="wand"> Podcast Episode AI</h1>
+        <h1> <img src="assets/wand.svg" class="wand"> Podcast Episode AI</h1>
         <p class="project-description">Generate a summary, speaker highlights, chapters, conversation flows, category tags and several other insights from your Podcast recording in seconds.</p>
 
         <input type="password" id="apiKey" placeholder="Enter API key">
@@ -338,7 +356,7 @@
             <label for="pdfFile"></label>
         </div>
         <button id="analyzeBtn" disabled>Generate</button>
-        <div id="loading" class="loading">Analyzing episode...</div>
+        <div id="loading" class="loading">Reviewing episode...</div>
         <div id="result"></div>
     </div>
 
@@ -360,15 +378,15 @@
         }
 
         async function analyzePdfWithClaude(text) {
-            const prompt = `Analyze this podcast transcript and provide insights in the following JSON format. It's critical to include ALL sections in the response:
+            const prompt = `Analyze this conversations which is a podcast transcript and provide insights in the following JSON format. It's critical to include ALL sections in the response:
 
 {
-    "podcastSummary": "A concise 2-3 sentence summary of the overall podcast discussion. Make sure to reference the host or speaker in third-person.",
+    "podcastSummary": "A concise 2-3 sentence summary of the overall podcast discussion. Make sure to reference the host and speakers in third-person.",
     
     "socialShareText": {
         "Spotify": "An engaging, catchy 3 sentence summary suitable for Spotify including the host and speaker names and topic",
-        "Youtube": "An engaging, catchy 3 sentence summary suitable for Spotify including the host and speaker names and topic",
-        "twitter": "An engaging, catchy 280-character summary suitable for Twitter including the host and speaker names with hashtags",
+        "Youtube": "An engaging, catchy 3 sentence summary suitable for Youtube including the host and speaker names and topic.",
+        "twitter": "An engaging, catchy 280-character summary suitable for Twitter including the host and speaker names with hashtags. Avoid using @ for mentions.",
         "linkedin": "A professional, compelling 1-2 sentence summary suitable for LinkedIn including the host and speaker names"
     },
 
@@ -384,7 +402,8 @@
     "speakerInsights": [
         {
             "name": "Speaker's name",
-            "role": "Speaker's role or expertise",
+            "role": "Speaker's role, title, designation or expertise",
+            "speakingTime": "Approximate time the speaker spoke for"
             "keyPoints": ["3-4 main points or insights from this speaker"],
             "bestQuote": "Most impactful or memorable quote from this speaker"
         }
@@ -401,20 +420,20 @@
         "SpeakerCount": "Number of unique speakers",
         "TopicsCount": "Number of distinct topics discussed",
         "InteractionType": "Type of conversation (interview, panel, debate, etc.)",
-        "TechnicalTermsUsed": ["List of technical, abbreviations or specialized terms used"]
+        "TechnicalTermsUsed":["List of technical terms, abbreviations or specialized terms used. If none then return a response - None"]
     },
 
-    "contentWarnings": ["Any filler words, sensitive topics, NSFW language or explicit content mentioned"],
+    "contentWarnings": ["List any sensitive terms, profanity, NSFW terms or explicit content mentioned. If none then return a response - None"],
     
     "actionableInsights": ["List of practical takeaways or lessons for listeners"],
 
     "followUpTopics": ["Potential topics for future episodes based on unanswered questions"],
 
     "resourcesMentioned": {
-        "books": ["Books mentioned"],
-        "links": ["Websites or resources discussed. Try to capture the URL"],
-        "people": ["People referenced"],
-        "companies": ["Companies or organizations mentioned"]
+        "books": ["Books mentioned. If none then return a response - None"],
+        "links": ["Websites or resources discussed. Try to capture the URL. If none then return a response - None"],
+        "people": ["People referenced. If none then return a response - None"],
+        "companies": ["Companies or organizations mentioned. If none then return a response - None"]
     },
 
     "podcastCategories": {
@@ -471,13 +490,26 @@ ${text}`;
             try {
                 const data = JSON.parse(analysis);
                 return `
+        <div class="banner">
+            <p> 
+                This sections is a summary of the Podcast transcript that includes the key theme of the discussion along with the host and speaker names referenced in third-person. This could help generate an episode description that could be used for publishing. 
+            </p>
+        </div>
             <div class="result-section">
-                <h3 id="p-summary">Podcast Episode Summary</h3>
+                <h3 id="p-summary">
+<img src="assets/wand.svg" class="mini-wand"> 
+Podcast Episode Summary</h3>
                 <p>${data.podcastSummary}</p>
             </div>
-
+        <div class="banner">
+            <p> 
+                This section includes snippets of the Podcast description that is a derivative of the summary but tailored for each platform based on the guidance and recommended rules for Podcast episode descriptions. This would help speed up publishing an audiogram or other outputs to social.
+            </p>
+        </div>
             <div class="result-section">
-                <h3 id="p-snippets">Social Media Snippets</h3>
+                <h3 id="p-snippets">
+<img src="assets/wand.svg" class="mini-wand"> 
+Social Media Snippets</h3>
                 ${Object.entries(data.socialShareText).map(([platform, text]) => `
                     <h4>${platform.charAt(0).toUpperCase() + platform.slice(1)}</h4>
                     <div class="social-share">
@@ -485,9 +517,15 @@ ${text}`;
                     </div>
                 `).join('')}
             </div>
-
+        <div class="banner">
+            <p> 
+               This section includes a highlevel summary of the host and speakers with clear titles, key points each of them made and memorable quote. This could help speed up the process of creating a speaker summary or shareable clip that could be used to introduce the speaker or added to more long form content like a blogpost or newsletter. 
+            </p>
+        </div>
             <div class="result-section">
-                <h3 id="p-speaker">Speaker Introduction</h3>
+                <h3 id="p-speaker">
+<img src="assets/wand.svg" class="mini-wand"> 
+Speaker Introduction</h3>
                 ${data.speakerInsights.map(speaker => `
                     <div class="speaker-section">
                         <h4>${speaker.name}</h4>
@@ -510,9 +548,16 @@ ${text}`;
                     </div>
                 `).join('')}
     </div>
-
+                                           
+               <div class="banner">
+                <p> 
+This is helpful to automatically generate episode chapters that segments the overall episode into chapters based on key topics with time stamps and a approximate duration for each chapter. This could be used to create chapters or break up the overall recording into sections for review or publishing as clips. 
+            </p>
+        </div>  
             <div class="result-section">
-                <h3 id="p-chapters">Podcast Episode Chapters</h3>
+                <h3 id="p-chapters">
+                                           <img src="assets/wand.svg" class="mini-wand"> 
+                                           Podcast Episode Chapters</h3>
                 ${data.keyTopics.map(topic => `
                     <div class="timeline-item">
                         <h4>${topic.topic}</h4>
@@ -524,24 +569,36 @@ ${text}`;
                     </div>
                 `).join('')}
             </div>
-
+        <div class="banner">
+            <p> 
+                This is similar to the summary but with a more detailed outline of the entire episode with emphasis on how the conversation flowed, the approach taken to kick off the conversation, the details of the actual conversation and how the episode wraps up. This could help with more long form content and also a longer summary.
+            </p>
+        </div>
             ${data.conversationFlow ? `
                 <div class="result-section">
-                    <h3 id="p-outline">Episode Flow</h3>
-                    <h4>Opening</h4>
+                    <h3 id="p-outline">
+<img src="assets/wand.svg" class="mini-wand"> 
+Episode Flow</h3>
+                    <h4>Intro</h4>
                     <p>${data.conversationFlow.openingTopic}</p>
                     ${data.conversationFlow.mainDiscussions?.length ? `
-                        <h4>Main Discussions</h4>
+                        <h4>Key Discussions Topics</h4>
                         <ol>${data.conversationFlow.mainDiscussions.map(point => `<li>${point}</li>`).join('')}</ol>
                     ` : ''}
                     <h4>Closing Thoughts</h4>
                     <p>${data.conversationFlow.closingThoughts}</p>
                 </div>
             ` : ''}
-
+        <div class="banner">
+            <p> 
+                These are helpful insights that could be used to preflight the episode before publishing or downloading. The goal of this section is to make it easy to review the episode for content that might need correction, addtional context or modification to ensure its relevant to the audience it was created for. 
+            </p>
+        </div>
             ${data.podcastMetrics ? `
                 <div class="result-section">
-                    <h3 id="p-stats">Episode Insights</h3>
+                    <h3 id="p-stats">
+<img src="assets/wand.svg" class="mini-wand"> 
+Episode Insights</h3>
                     <div class="metrics-grid">
                         ${Object.entries(data.podcastMetrics)
                             .filter(([key, value]) => typeof value !== 'object')
@@ -552,15 +609,14 @@ ${text}`;
                                 </div>
                             `).join('')}
                     </div>
-                    ${data.podcastMetrics.technicalTermsUsed?.length ? `
+                    ${data.podcastMetrics.TechnicalTermsUsed?.length ? `
                         <h4>Technical Terms Used</h4>
                         <div class="tags">
-                            ${data.podcastMetrics.technicalTermsUsed.map(term => `<span class="tag">${term}</span>`).join('')}
+                            ${data.podcastMetrics.TechnicalTermsUsed.map(term => `<span class="tag">${term}</span>`).join('')}
                         </div>
                     ` : ''}
                 </div>
             ` : ''}
-
             ${data.contentWarnings?.length ? `
                 <div class="result-section warning-section">
                     <h3 id="p-preflight">NSFW & Explicit Content</h3>
@@ -569,28 +625,46 @@ ${text}`;
                     </ul>
                 </div>
             ` : ''}
-
+        <div class="banner">
+            <p> 
+                This is helpful in for creating quick summary of key insights from the conversation and giving users more learnings from the episode which is different from the summary. In the context of education or content intended to help the audience learn, this section could help generate clear takeaways based on the conversation. 
+            </p>
+        </div>
             ${data.actionableInsights?.length ? `
                 <div class="result-section">
-                    <h3 id="p-takeway">Key Takeaways</h3>
+                    <h3 id="p-takeway">
+<img src="assets/wand.svg" class="mini-wand"> 
+Key Takeaways</h3>
                     <ul class="actionable-list">
                         ${data.actionableInsights.map(insight => `<li>${insight}</li>`).join('')}
                     </ul>
                 </div>
             ` : ''}
-
+        <div class="banner">
+            <p> 
+                This is helpful to ideate on next episode topics or build topics for continuity of the conversation. This mainly applies to the host and could help them speed up the process of identifying the next relevant topics they could plan for. 
+            </p>
+        </div>
             ${data.followUpTopics?.length ? `
                 <div class="result-section">
-                    <h3 id="p-suggestion">Next Episode Topics</h3>
+                    <h3 id="p-suggestion">
+<img src="assets/wand.svg" class="mini-wand"> 
+Next Episode Topics</h3>
                     <ul class="follow-up-list">
                         ${data.followUpTopics.map(topic => `<li>${topic}</li>`).join('')}
                     </ul>
                 </div>
             ` : ''}
-
+        <div class="banner">
+            <p> 
+                This is helpful in extracting key information from the conversation that could be added as resources for more long form content or fact checking. The goal of this section to give users an easy way to extract references from the conversation without having to go through the entire transcript to find it. 
+            </p>
+        </div>
             ${data.resourcesMentioned ? `
                 <div class="result-section">
-                    <h3 id="p-resources">Resources Mentioned</h3>
+                    <h3 id="p-resources">
+<img src="assets/wand.svg" class="mini-wand"> 
+Resources Mentioned</h3>
                     ${Object.entries(data.resourcesMentioned).map(([category, items]) => 
                         items?.length ? `
                             <div class="resource-category">
@@ -603,10 +677,16 @@ ${text}`;
                     ).join('')}
                 </div>
             ` : ''}
-
+        <div class="banner">
+            <p> 
+                This is helpful in suggesting tags, SEO terms and categories to help ensure the episode is categorized correctly based on the content and its relevance. It also helps the user quickly determine who the target audience could be based on the nature of the content. 
+            </p>
+        </div>
             ${data.podcastCategories ? `
                 <div class="result-section">
-                    <h3 id="p-tags">Categories & Audience</h3>
+                    <h3 id="p-tags">
+<img src="assets/wand.svg" class="mini-wand"> 
+Categories & Audience</h3>
                     ${data.podcastCategories.primaryCategory ? `
                         <p><strong>Primary Category:</strong> ${data.podcastCategories.primaryCategory}</p>
                     ` : ''}
@@ -666,5 +746,8 @@ ${text}`;
                 }
             }
         });
+
     </script>
-</body></html>
+</body>
+
+</html>
